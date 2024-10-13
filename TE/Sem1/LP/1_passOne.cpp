@@ -58,48 +58,49 @@ public:
         litindex = 0;
         lc = -1;
 
-        while (getline(fin, line))
+        while (getline(fin, line)) // Process each line from the input file
         {
-            stringstream st(line);
-            st >> word;
+            stringstream st(line); // Create a stringstream object from the line 
+            st >> word; //apan kay karto ki >>word manjh enext word fetch karto from the line 
             string label = "";
 
-            if (opcode.count(word) == 0)
+            if (opcode.count(word) == 0) // If word is not in the opcode table ie it is a label
             {
-                if (symtab.count(word) == 0)
+                if (symtab.count(word) == 0) //// If the label is not already in the symbol table, add it
                 {
-                    symtab[word] = {lc, to_string(symtab.size() + 1)};
+                    symtab[word] = {lc, to_string(symtab.size() + 1)}; // Add the label to the symbol table with its current LC
                 }
                 else
                 {
-                    symtab[word].first = lc;
+                    symtab[word].first = lc; // If the label already exists, update its location (LC)
                 }
-                label = word;
-                st >> word;
+                label = word; // Store the label
+                st >> word;  // Move to the next word which will be an operation
             }
 
-            string operation = word;
+            string operation = word; //storing the operations 
+             // Handle various operations (assembly directives and instructions)
             if (operation == "START")
             {
                 fout << "    (" << opcode[word].first << ", " << opcode[word].second << ") ";
-                st >> word;
-                fout << "(C, " << word << ") ";
-                lc = stoi(word);
+                st >> word;  // Read the constant value after START , which is the location counter
+                fout << "(C, " << word << ") "; //C stands for constant here 
+                lc = stoi(word); 
             }
             else if (operation == "END")
             {
                 fout << "    (" << opcode[word].first << ", " << opcode[word].second << ") ";
                 fout << endl;
-                pooltab.push_back("#" + to_string(litindex + 1));
+                pooltab.push_back("#" + to_string(litindex + 1)); // Add literals to memory and update their LC in the literal table
                 for (; litindex < littab.size(); litindex++)
                 {
                     fout << lc << " ";
                     fout << "( " << opcode["DC"].first << ", " << opcode["DC"].second << ") ";
-                    littab[litindex].second = lc;
+                    littab[litindex].second = lc;  //update the literal table
                     string literal = littab[litindex].first;
                     cout << literal << endl;
-                    string sublit = literal.substr(2, literal.length() - 3); //='5' so processing 5
-                    fout << "( C, " << sublit << ") ";
+                    string sublit = literal.substr(2, literal.length() - 3); //='7' so processing 7
+                    fout << "( C, " << sublit << ") "; //literal table madhun toh constant gheto apan 
                     fout << endl;
                     lc++;
                 }
@@ -108,7 +109,7 @@ public:
             {
                 fout << "    (" << opcode[word].first << ", " << opcode[word].second << ") ";
                 fout << endl;
-                pooltab.push_back("#" + to_string(litindex + 1));
+                pooltab.push_back("#" + to_string(litindex + 1));  // Add literals to memory and update their LC in the literal table
                 for (; litindex < littab.size(); litindex++)
                 {
                     fout << lc << " ";
@@ -124,19 +125,21 @@ public:
             else if (operation == "ORIGIN")
             {
                 fout << "    (" << opcode[word].first << ", " << opcode[word].second << ") ";
-                st >> word;             
-                lc = computeNewLc(word);
+                st >> word;              
+                lc = computeNewLc(word); //Update LC based on expression or label
             }
              else if (operation == "EQU")
-        {
-            fout << "    (" << opcode[word].first << ", " << opcode[word].second << ") ";
-            st >> word; 
-        }
+            {
+                fout << "    (" << opcode[word].first << ", " << opcode[word].second << ") ";
+                st >> word; 
+            }
+            // General instructions and literals
             else
             {
-                fout << lc << " ";
+                fout << lc << " "; //output the current lc 
                 fout << "(" << opcode[word].first << ", " << opcode[word].second << ") ";
 
+                // Process the rest of the line (operands)
                 while (st >> word)
                 {
                     if (operation == "DC")
@@ -149,35 +152,37 @@ public:
                     }
                     else if (operation == "DS")
                     {
-                        fout << "(C, " << word << ") ";
+                        fout << "(C, " << word << ") "; //doubt
                         lc += stoi(word) - 1;
                     }
-                    else if (word[0] == '=') // Check if it's a literal
+
+                       // Handle literals (e.g., '=5')
+                    else if (word[0] == '=') 
                     {
-                        // Check if the literal is already in littab
                         bool found = false;
+                        //check if literal is already present in the literal table
                         for (const auto &lit : littab)
                         {
-                            if (lit.first == word) // Compare literals
+                            if (lit.first == word)  
                             {
                                 found = true;
                                 break;
                             }
                         }
-
-                        // If not found, add it to littab
+                        
+                        //if the literal is new , add it to the table   
                         if (!found)
                         {
-                            littab.push_back({word, lc}); // Add to the literal table
+                            littab.push_back({word, lc}); 
                             fout << "(L, " << littab.size() << ") ";
                         }
                         else
                         {
-                            // If it is found, you can decide what to do; for now, we will just output the existing literal
-                            fout << "(L, " << findLiteralIndex(word) << ") "; // You need to implement findLiteralIndex
+                            fout << "(L, " << findLiteralIndex(word) << ") "; 
                         }
                     }
 
+                    //handle the symbols
                     else if (opcode.count(word) > 0)
                     {
                         fout << "(" << opcode[word].first << ") ";
@@ -196,9 +201,12 @@ public:
             fout << endl;
         }
 
+        // Close the input and output files
+
         fin.close();
         fout.close();
 
+        // Write the symbol table, literal table, and pool table to their files
         writeSymtab();
         writeLittab();
         writePooltab();
@@ -330,6 +338,7 @@ int main()
     } while (choice != 6);
     return 0;
 }
+
 
 
 /*
