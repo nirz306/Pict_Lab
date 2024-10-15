@@ -1,14 +1,14 @@
--- Unnamed PL/SQL code block: Use of Control structure and Exception handling is mandatory.
--- Write a PL/SQL block of code for the following requirements:-
--- Schema:
--- 1. Borrower(Roll, Name, DateofIssue, NameofBook, Status)
--- 2. Fine (Roll, Date, Amt)
--- Accept Roll & N ame of book from user.
--- Check the number of days (from date of issue), if days are between 15 to 30 then fine amount will be Rs 5per day.
--- If no. of days>30, per day fine will be Rs 50 per day & for days less than 30, Rs. 5 per day.
--- After submitting the book, status will change from I to R.
--- If condition of fine is true, then details will be stored into fine table.
--- Frame the problem statement for writing PL/SQL block inline with above statement.
+// -- Unnamed PL/SQL code block: Use of Control structure and Exception handling is mandatory.
+// -- Write a PL/SQL block of code for the following requirements:-
+// -- Schema:
+// -- 1. Borrower(Roll, Name, DateofIssue, NameofBook, Status)
+// -- 2. Fine (Roll, Date, Amt)
+// -- Accept Roll & N ame of book from user.
+// -- Check the number of days (from date of issue), if days are between 15 to 30 then fine amount will be Rs 5per day.
+// -- If no. of days>30, per day fine will be Rs 50 per day & for days less than 30, Rs. 5 per day.
+// -- After submitting the book, status will change from I to R.
+// -- If condition of fine is true, then details will be stored into fine table.
+// -- Frame the problem statement for writing PL/SQL block inline with above statement.
 
   
 CREATE TABLE borrower(
@@ -20,7 +20,7 @@ CREATE TABLE borrower(
 );
 
 
---create table
+// --create table
 CREATE TABLE fine(
     rollno int,
     date date,
@@ -28,7 +28,7 @@ CREATE TABLE fine(
 );
 
 
--- Insert Data into borrowers
+// -- Insert Data into borrowers
 INSERT INTO borrower(roll, name, doi, book_name, status)
 VALUES (
         10,
@@ -55,23 +55,24 @@ VALUES (
     ),
     (15, "Kumar", "2023-10-29", "CNS", "issued");
 
--- Schema:
--- 1. Borrower(Roll, Name, DateofIssue, NameofBook, Status)
--- 2. Fine (Roll, Date, Amt)    
--- Write a procedure to calculate fine
+
+// -- Schema:
+// -- 1. Borrower(Roll, Name, DateofIssue, NameofBook, Status)
+// -- 2. Fine (Roll, Date, Amt)    
+// -- Write a procedure to calculate fine
 create procedure calc_fine(roll_new int, book_name_new varchar(20)) begin
     declare x integer;
     declare continue handler for not found begin
         select 'NOT FOUND';
     end;
 
---datediff is a sql function that calculates the difference (in days) between two date values.
+// --datediff is a sql function that calculates the difference (in days) between two date values.
     select datediff(curdate(), doi) into x  
     from borrower
     where roll = roll_new and book_name = book_name_new;
 
 
-    --Check for fine
+    // --Check for fine
     if(x > 15 && x < 30) then
         insert into fine(rollno, date, amount)
         values(roll_new, curdate(), (x * 5));
@@ -88,4 +89,4 @@ create procedure calc_fine(roll_new int, book_name_new varchar(20)) begin
     set status = 'returned'
     where roll = roll_new and book_name = book_name_new;
 end;
--- call the Procedure for the user roll
+// -- call the Procedure for the user roll
