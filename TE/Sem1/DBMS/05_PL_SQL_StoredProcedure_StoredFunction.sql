@@ -1,12 +1,12 @@
-// --Named PL/SQL Block: PL/SQL Stored Procedure and Stored Function.
-// --Write a Stored Procedure namely proc_Grade for the categorization of student. 
-// --If marks scored by students in examination is <=1500 and marks>=990 then student
-// --will be placed in distinction category if marks scored are between 989 and900 category 
-// --is first class, if marks899and 825 category is Higher Second Class.
-// --Write a PL/SQL block to use procedure created with above requirement.
-// --Stud_Marks(name, total_marks)
-// --Result(Roll,Name, Class)
-// --1. Create Table stud_marks
+-- // --Named PL/SQL Block: PL/SQL Stored Procedure and Stored Function.
+-- // --Write a Stored Procedure namely proc_Grade for the categorization of student. 
+-- // --If marks scored by students in examination is <=1500 and marks>=990 then student
+-- // --will be placed in distinction category if marks scored are between 989 and900 category 
+-- // --is first class, if marks899and 825 category is Higher Second Class.
+-- // --Write a PL/SQL block to use procedure created with above requirement.
+-- // --Stud_Marks(name, total_marks)
+-- // --Result(Roll,Name, Class)
+-- // --1. Create Table stud_marks
 
 create table stud_marks(
     id int primary key auto_increment,
@@ -16,7 +16,7 @@ create table stud_marks(
 );
 
 
-// --2. Create table result
+-- // --2. Create table result
 create table result(
     roll int,
     name varchar(30),
@@ -24,7 +24,7 @@ create table result(
 );
 
 
-// --3. Insert Data into stud_marks;
+-- // --3. Insert Data into stud_marks;
 insert into stud_marks(roll, name, total_marks)
 values (1, "Ayush", 1488),
     (2, "Piysh", 1300),
@@ -33,7 +33,7 @@ values (1, "Ayush", 1488),
     (5, "Yash", 857),
     (6, "David", 845);
 
-// -- 4. Create a PROCEDURE to calculate the grades
+-- // -- 4. Create a PROCEDURE to calculate the grades
 create procedure proc_result(in marks int, out class char(20)) 
 begin 
     if(marks < 1500 && marks > 990) then
@@ -57,13 +57,13 @@ begin
 end;
 
 
-// -- 5. Create a function to calculate and store marks
+-- // -- 5. Create a function to calculate and store marks
 create function final_result(rno int) returns int deterministic 
 begin
     declare fmarks integer;
     declare grade varchar(30);
     declare stud_name varchar(30);
-// --cointinue function means that the functions continues to work , basically it is a form of exception handling 
+-- // --cointinue function means that the functions continues to work , basically it is a form of exception handling 
     declare continue handler for not found begin return 0; 
 end;
     select sm.total_marks,
@@ -72,7 +72,7 @@ end;
     from stud_marks as sm
     where sm.roll = rno;
 
-//everytime calling that function, inside this function
+-- //everytime calling that function, inside this function
     call proc_result(fmarks, @grade);
  
     insert into result(roll, name, class)
@@ -81,5 +81,5 @@ end;
 end;
 
 
-// calling the final_result function
+-- // calling the final_result function
 select final_result(3);
