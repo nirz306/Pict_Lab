@@ -201,20 +201,31 @@ db.teachers.find();
 
 
 // 4. Find the information about all teachers of computer department 
-db.teachers.find({ department: "computer" });
+db.teachers.find({ department: "Computer" });
 
 // 5. Find the information about all teachers of computer, IT and E&TC
-db.teachers.find({ $and: [{ department: "Computer" }, { department: "IT" }, { department: "FE" }] });
+db.teachers.find({ $or: [{ department: "Computer" }, { department: "IT" }, { department: "FE" }] });
 
 // 6. Find the information about all teachers of computer, IT and E&TC
 //      department having salary in between 70,000 and 1,00,000(inclusive)
 
-db.teachers.find({ $and: [{ $or: [{ department: "Computer" }, { department: "IT" }, { department: "EXTC" }] }, { 'salary.basic': { $gt: 70000 } }, { 'salary.basic': { $lte: 100000 } }] });
+db.teachers.find({
+    $and: [
+        {
+            $or: [
+                { department: "Computer" },
+                { department: "Information Technology" },
+                { department: "Electronics and Telecommunication" }
+            ]
+        },
+        { 'salary.basic': { $gt: 70000 } },
+        { 'salary.basic': { $lte: 100000 } }
+    ]
+});
 
 
-// 7.  Update the experience of any teacher to 10 years and if the entry is not
-//     available in database consider the entry as new entry (use update function
-//     only) db.students.update({ roll: 19 }, { $set: { name: 'Rohit', course: 'IT' } }, { upsert:      true })
+// 7.  name shodun update karta 
+// The upsert: true option means that if no document matching the filter condition (name: 'Prof. Meera Joshi') is found, MongoDB will insert a new document with the specified values.
 db.teachers.updateOne({ name: 'Prof. Meera Joshi' }, { $set: { experience: 10 } }, { upsert: true });
 
 
@@ -222,7 +233,7 @@ db.teachers.updateOne({ name: 'Prof. Meera Joshi' }, { $set: { experience: 10 } 
 db.teachers.find().sort({ 'experience.teaching': -1 });
 
 //8. Use save() method to insert one query to database.
-db.teahers.updateOne({}, {
+db.teachers.updateOne({}, {
     $set: {
         experience: {
             teaching: 8,
