@@ -152,7 +152,6 @@ public:
                     }
                     else if (operation == "DS")
                     {
-                        fout << "(C, " << word << ") "; //doubt
                         lc += stoi(word) - 1;
                     }
 
@@ -341,7 +340,7 @@ int main()
 
 
 /*
-Input:                                                           Output:
+Input:                                               Output:
        START     101                                     (AD, 01) (C, 101)
        MOVER     DREG      ='9'                      101 (IS, 04) (4) (L, 1)
        MOVEM     DREG      M                         102 (IS, 05) (4) (S, 1)
@@ -362,7 +361,7 @@ BACK   EQU       LOOP                                    (AD, 04)
        MULT      CREG      ='8'                      111 (IS, 03) (3) (L, 4)
        STOP                                          112 (IS, 00)
 
-M      DS        3                                   113 (DL, 02) (C, 3)
+M      DS        3                                   113 (DL, 02)
        END                                               (AD, 02)
                                                      116 ( DL, 01) ( C, 8)
        */                                                                        
