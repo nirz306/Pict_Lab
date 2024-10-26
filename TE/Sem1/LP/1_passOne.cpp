@@ -152,7 +152,10 @@ public:
                     }
                     else if (operation == "DS")
                     {
+<<<<<<< HEAD
                         // fout << "(C, " << word << ") "; //doubt
+=======
+>>>>>>> 9113578363dccf57a0f9b1fb5994ea437916f608
                         lc += stoi(word) - 1;
                     }
 
@@ -340,34 +343,32 @@ int main()
 }
 
 
-
 /*
-Output:
-    (AD, 01) (C, 101)
-101 (IS, 04) (4) (L, 1)
-102 (IS, 05) (4) (S, 1)
-103 (IS, 04) (2) (L, 1)
-    (AD, 03)
-    (AD, 05)
-104 ( DL, 01) (C, 9)
+Input:                                               Output:
+       START     101                                     (AD, 01) (C, 101)
+       MOVER     DREG      ='9'                      101 (IS, 04) (4) (L, 1)
+       MOVEM     DREG      M                         102 (IS, 05) (4) (S, 1)
+LOOP   MOVER     BREG      ='9'                      103 (IS, 04) (2) (L, 1)
+       ORIGIN    LOOP+1                                    (AD, 03)
+       LTORG                                               (AD, 05)
+                                                     104 ( DL, 01) (C, 9)
+T      ADD       AREG      ='5'                      105 (IS, 01) (1) (L, 2)
+       SUB       BREG      ='7'                      106 (IS, 02) (2) (L, 3)
+       COMP      BREG      M                         107 (IS, 06) (2) (S, 1)
+       BC        LT        BACK                      108 (IS, 07) (1) (S, 4)
+       LTORG                                             (AD, 05)
+                                                     109 ( DL, 01) (C, 5) 
+                                                     110 ( DL, 01) (C, 7)
+       
+BACK   EQU       LOOP                                    (AD, 04)
+       ORIGIN    T+6                                     (AD, 03)
+       MULT      CREG      ='8'                      111 (IS, 03) (3) (L, 4)
+       STOP                                          112 (IS, 00)
 
-105 (IS, 01) (1) (L, 2)
-106 (IS, 02) (2) (L, 3)
-107 (IS, 06) (2) (S, 1)
-108 (IS, 07) (1) (S, 4)
-    (AD, 05)
-109 ( DL, 01) (C, 5) 
-110 ( DL, 01) (C, 7)
-
-    (AD, 04)
-    (AD, 03)
-111 (IS, 03) (3) (L, 4)
-112 (IS, 00)
-113 (DL, 02) (C, 3)
-    (AD, 02)
-116 ( DL, 01) ( C, 8)
-*/
-
+M      DS        3                                   113 (DL, 02)
+       END                                               (AD, 02)
+                                                     116 ( DL, 01) ( C, 8)
+       */                                                                        
 /*
 Pool Table:
 #1
