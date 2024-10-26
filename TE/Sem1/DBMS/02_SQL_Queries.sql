@@ -9,7 +9,7 @@
 -- 1. Creating Table Employee;
 ;
 create table employee(
-    emp_id int primary key auto_increment,
+    emp_id int primary key auto_increment, --the emp_id will automatically get incremented for every value is inserted, there is no need to additionally provide value for it 
     dept_id int,
     emp_fname varchar(255),
     emp_lname varchar(255),
@@ -23,6 +23,8 @@ create table dept(
     dept_name varchar(255),
     dept_location varchar(255)
 );
+
+
 --Creating table projects
 create table projects(
     proj_id int primary key auto_increment,
@@ -33,6 +35,8 @@ create table projects(
     proj_year int,
     foreign key (dept_id) references dept(dept_id) on delete cascade
 );
+
+
 --Add Foreign Key in Employees
 alter table employee
 add constraint fk_emp_dept foreign key (dept_id) references dept(dept_id);

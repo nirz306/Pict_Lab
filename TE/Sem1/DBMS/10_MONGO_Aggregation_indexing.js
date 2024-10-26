@@ -62,9 +62,8 @@ db.orders.insertMany([
 
 //1. Find out how many toothbrushes were sold
 //Single Aggregation
-db.purchase_orders.count({ product: 'toothbrush' });
-//OR
-db.purchase_orders.aggregate([
+//Each document that matches the criteria contributes 1 to the sum
+db.orders.aggregate([
     {
         $match: { product: 'toothbrush' }
     },
@@ -75,21 +74,22 @@ db.purchase_orders.aggregate([
         }
     }
 ]);
+//  output : [ { _id: 'toothbrush', totalQty: 4 } ]
 
 //2. Find the list of all products sold
-db.purchase_orders.distinct("product");
+db.orders.distinct("product");
 //OR
-db.purchase_orders.aggregate([
+db.orders.aggregate([
     {
         $group: {
             _id: "$product"
         }
-    }
+    }   
 ]);
 
 
 //3. Find the total amount of money spent by each customer
-db.purchase_orders.aggregate([
+db.orders.aggregate([
     {
         $group: {
             _id: "$customer",
@@ -103,7 +103,7 @@ db.purchase_orders.aggregate([
 
 // 4.Find how much has been spent on each product and sort it by amount spent
 
-db.purchase_orders.aggregate([
+db.orders.aggregate([
     {
         $group: {
             _id: "$product",
@@ -118,7 +118,7 @@ db.purchase_orders.aggregate([
 ])
 
 // 5.Find the product with least earnings.
-db.purchase_orders.aggregate([
+db.orders.aggregate([
     {
         $group: {
             _id: "$product",
@@ -127,17 +127,17 @@ db.purchase_orders.aggregate([
     },
     {
         $sort: {
-            price: -1
+            price: 1
         }
     },
     {
-        $limit: 1
+        $limit: 1 //top ekch ele ghenar 
     }
 ])
 
 // 6.Find how much money each customer has spent on toothbrushes and pizza
 
-db.purchase_orders.aggregate([
+db.orders.aggregate([
     {
         $match: { product: { $in: ['toothbrush', 'pizza'] } }
     },
@@ -151,7 +151,7 @@ db.purchase_orders.aggregate([
 
 
 // 7.Find the customer who has given highest business for the product toothbrush
-db.purchase_orders.aggregate([
+db.orders.aggregate([
     {
         $match: { product: 'toothbrush' }
     },

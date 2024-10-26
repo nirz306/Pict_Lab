@@ -152,7 +152,7 @@ public:
                     }
                     else if (operation == "DS")
                     {
-                        fout << "(C, " << word << ") "; //doubt
+                        // fout << "(C, " << word << ") "; //doubt
                         lc += stoi(word) - 1;
                     }
 
