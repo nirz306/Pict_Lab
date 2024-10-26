@@ -377,4 +377,9 @@ Literal Table:
 ='7' 110
 ='8' 116
 
+Symbol Table:
+4 BACK 111
+2 LOOP 103
+1 M 113
+3 T 105
 */
