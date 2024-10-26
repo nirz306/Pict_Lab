@@ -249,3 +249,29 @@ int main()
    mp.displayAll(); // Display all tables after processing
    return 0;
 }
+
+/*
+Input                                          Output 
+-----------------------------------------------------------
+MACRO                                         ---------MNT-----------
+INCR1 &FIRST , &SECOND=DATA9                  Name    #PP     #KP     #MDTP   #KDTP
+A 1, &FIRST                                   INCR1   1       1       0       0
+L 2, &SECOND                                  INCR2   1       1       3       1
+MEND                                         -------------------------
+MACRO                                         ---------MDT-----------
+INCR2 &ARG1 , &ARG2=DATA5                    Line 1: A 1,  (P,1) 
+L 3, &ARG1                                   Line 2: L 2,  (P,2) 
+ST 4, &ARG2                                  Line 3: MEND 
+MEND                                         Line 4: L 3,  (P,1) 
+                                             Line 5: ST 4,  (P,2) 
+                                             Line 6: MEND 
+                                             -------------------------
+                                             --------KDTAB----------
+                                             &SECOND DATA9
+                                             &ARG2   DATA5
+                                             -------------------------
+                                             --------PNTAB----------
+                                             &FIRST  &SECOND
+                                             &ARG1   &ARG2
+                                             -----------------------
+*/
