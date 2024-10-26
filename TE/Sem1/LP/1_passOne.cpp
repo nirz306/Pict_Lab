@@ -152,10 +152,6 @@ public:
                     }
                     else if (operation == "DS")
                     {
-<<<<<<< HEAD
-                        // fout << "(C, " << word << ") "; //doubt
-=======
->>>>>>> 9113578363dccf57a0f9b1fb5994ea437916f608
                         lc += stoi(word) - 1;
                     }
 
