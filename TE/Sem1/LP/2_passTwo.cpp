@@ -106,6 +106,9 @@ int main() {
 }
 
 /* 
+
+INPUT TEXT FILES 
+
 SYM TABLE
 4 AGAIN 104
 1 N 114
@@ -147,6 +150,21 @@ LIT TABLE
 113 (DL, 02)                              113 00 00 00
     (AD, 02)
 116 (DL, 01) (C, 8)                       116 00 00 8
+
+
+                                        ===========Symbol table ==============
+                                                    AGAIN 104
+                                                    N 114
+                                                    ONE 117
+                                                    RESULT 115
+                                                    TERM 118
+                                                    TWO 119
+                                                    
+                                        ===========Literal table ===============
+                                                    ='9' 104
+                                                    ='5' 109
+                                                    ='7' 110
+                                                    ='8' 116
 
 NO MACHINE CODE FOR AD
 DL, 01 sathi 0 00 constant
