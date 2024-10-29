@@ -22,9 +22,10 @@ public:
         while (getline(sy, line)) {
             stringstream ss(line);
             string label;
+            string srno;
             int address;
-            ss >> label >> word >> address; // Read the symbol number, symbol name (ignore), and address
-            symtable.push_back({word, address});
+            ss >> srno >> label >> address; // Read the symbol number, symbol name (ignore), and address
+            symtable.push_back({label, address});
         }
 
         // Load Literal Table
