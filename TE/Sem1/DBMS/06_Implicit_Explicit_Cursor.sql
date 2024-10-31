@@ -2,92 +2,80 @@
 --Write a PL/SQL block of code using parameterized Cursor, that will merge the 
 --data available in the newly created table N_EmpId with the data available in the table O_EmpId.
 --If the data in the first table already exist in the second table then that data should be skipped.
--- 1. Create old table
+-- Step 1: Create the "old" employee table
+
+
 create table o_emp(
-    e_id int,
-    fname varchar(45),
-    lname varchar(45),
-    salary int
+    e_id int,             -- Employee ID (integer)
+    fname varchar(45),    -- First name (up to 45 characters)
+    lname varchar(45),    -- Last name (up to 45 characters)
+    salary int            -- Salary (integer)
 );
--- 2. create new table
+
+-- Step 2: Create the "new" employee table
 create table n_emp(
-    e_id int primary key,
-    fname varchar(45),
-    lname varchar(45),
-    salary int
+    e_id int primary key, -- Employee ID as a primary key to enforce uniqueness
+    fname varchar(45),    -- First name (up to 45 characters)
+    lname varchar(45),    -- Last name (up to 45 characters)
+    salary int            -- Salary (integer)
 );
---3. Insert data in old table
+
+-- Step 3: Insert data into the "old" employee table
 insert into o_emp (e_id, fname, lname, salary)
-values (1,'Ayush', 'B', 20000),
-    (2,'Piyush', 'Joih', 30000),
-    (3,'Kumar', 'Yadav', 34000),
-    (4,'Ash', 'M', 40000),
-    (5,'Ajey', 'N', 30000),
-    (6,'Yash', 'S', 40000);
---4. Create a cursor
---CURSOR with loop
+values 
+    (1, 'Ayush', 'B', 20000),
+    (2, 'Piyush', 'Joih', 30000),
+    (3, 'Kumar', 'Yadav', 34000),
+    (4, 'Ash', 'M', 40000),
+    (5, 'Ajey', 'N', 30000),
+    (6, 'Yash', 'S', 40000);
+
+-- Step 4: Create a procedure with a cursor to transfer data from o_emp to n_emp
 create procedure copyEmp() 
 begin
+    -- Step 4.1: Declare a variable to track the end of cursor
     declare done int default false;
+
+    -- Step 4.2: Declare variables to store data fetched from the cursor
     declare n_e_id int;
     declare n_fname varchar(45);
     declare n_lname varchar(45);
     declare n_salary int;
 
+    -- Step 4.3: Define a cursor to select all rows from the "old" employee table (o_emp)
     declare cur cursor for 
         select e_id, fname, lname, salary from o_emp;
-    
+
+    -- Step 4.4: Declare a handler to set `done` to true when no more rows are found
     declare continue handler for not found set done = true;
+
+    -- Step 4.5: Open the cursor to begin fetching data from o_emp
     open cur;
-    read_loop :LOOP 
+
+    -- Step 4.6: Begin the loop to read each row from o_emp
+    read_loop : LOOP 
+        -- Fetch the current row from the cursor into declared variables
         fetch cur into n_e_id, n_fname, n_lname, n_salary;
-    
-    if done then 
-        leave read_loop;
-    end if;
-        if not exists(select 1 from n_emp where n_emp.e_id=n_e_id)
-        then 
-            insert into n_emp(e_id, fname,lname,salary) values(n_e_id,n_fname,n_lname,n_salary);
+
+        -- Check if the cursor has reached the end of the table
+        if done then 
+            leave read_loop; -- Exit the loop if no more rows
+        end if;
+
+        -- Step 4.7: Check if the current employee ID already exists in n_emp
+        if not exists(select 1 from n_emp where n_emp.e_id = n_e_id) then 
+            -- If the employee ID is not found in n_emp, insert the row
+            insert into n_emp(e_id, fname, lname, salary) 
+            values(n_e_id, n_fname, n_lname, n_salary);
         end if;
     end loop;
+
+    -- Step 4.8: Close the cursor after processing all rows
     close cur;
 end;
 
--- cal the procedure
-call compyEmp();
---check 
-select *
-from n_emp;
+-- Step 5: Call the procedure to execute the data transfer
+call copyEmp();
 
-
-
-CREATE PROCEDURE copyData()
-BEGIN
-    DECLARE done INT DEFAULT FALSE;
-    DECLARE e_id INT;
-    DECLARE fname VARCHAR(50);
-    DECLARE lname VARCHAR(50);
-    DECLARE salary INT;
-    
-    DECLARE cur CURSOR FOR SELECT e_id, fname, lname, salary FROM o_emp;
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-    
-    OPEN cur;
-    
-    read_loop: LOOP
-        FETCH cur INTO e_id, fname, lname, salary;
-        
-        IF done THEN
-            LEAVE read_loop;
-        END IF;
--- The condition IF NOT EXISTS (SELECT 1 FROM n_emp WHERE n_emp.e_id = n_e_id) checks if the employee ID (n_e_id) from the old table o_emp does not already exist in the n_emp table.
--- If no matching record is found in n_emp, then the condition is TRUE, and the following code block (the INSERT statement) will be executed, inserting the employee record into n_emp.
-        IF NOT EXISTS (SELECT 1 FROM n_emp WHERE n_emp.e_id = e_id) THEN
-            -- Insert the row into n_emp if it doesn't exist
-            INSERT INTO n_emp (e_id, fname, lname, salary) VALUES (e_id, fname, lname, salary);
-        END IF;
-    END LOOP;
-    
-    CLOSE cur;
-
-END;
+-- Step 6: Check the data in n_emp to verify that records were transferred correctly
+select * from n_emp;
