@@ -31,6 +31,8 @@ values
     (6, 'Yash', 'S', 40000);
 
 -- Step 4: Create a procedure with a cursor to transfer data from o_emp to n_emp
+delimiter $
+drop procedure if exists copyData;
 create procedure copyEmp() 
 begin
     -- Step 4.1: Declare a variable to track the end of cursor
@@ -73,6 +75,8 @@ begin
     -- Step 4.8: Close the cursor after processing all rows
     close cur;
 end;
+$
+DELIMITER ;
 
 -- Step 5: Call the procedure to execute the data transfer
 call copyEmp();
