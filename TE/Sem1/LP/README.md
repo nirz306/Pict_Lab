@@ -4,7 +4,7 @@
 
 | Expt. No. | Problem Statement | Link |
 |-----------|--------------------|------|
-| **A1-01** | Design suitable Data structures and implement Pass-I of a two-pass assembler for a pseudo-machine. Implementation should consist of a few instructions from each category and a few assembler directives. | [A1-01_Link]("https://github.com/nirz306/Pict_Lab/blob/main/TE/Sem1/LP/1_passOne.cpp") |
+| **A1-01** | Design suitable Data structures and implement Pass-I of a two-pass assembler for a pseudo-machine. Implementation should consist of a few instructions from each category and a few assembler directives. | [Link](https://github.com/nirz306/Pict_Lab/blob/main/TE/Sem1/LP/1_passOne.cpp) |
 | **A1-02** | Design suitable Data structures and implement Pass-II of a two-pass assembler for a pseudo-machine. The output of Pass-I (intermediate code file, symbol table, and literal table) should be input for Pass-II. | [A1-02_Link](#) |
 | **A2-01** | Design suitable data structures and implement Pass-I of a two-pass macro-processor. | [A2-01_Link](#) |
 | **A2-02** | Design suitable data structures and implement Pass-II of a two-pass macro-processor. The output of Pass-I (MNT, MDT, and intermediate code file without any macro definitions) should be input for Pass-II. | [A2-02_Link](#) |
