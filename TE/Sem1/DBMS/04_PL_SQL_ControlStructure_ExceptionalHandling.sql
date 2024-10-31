@@ -136,3 +136,42 @@ call p3(3,'Nira');
 -- | 4       | Jagdish   | 2017-06-10  | DBMS        | I      |
 -- | 5       | Jayashree | 2017-07-05  | MySQL       | I      |
 -- | 6       | Kiran     | 2017-06-30  | Java        | I      |
+
+
+
+--use of error handling 
+DELIMITER $
+drop procedure if exists a2;
+CREATE PROCEDURE a2(IN rno1 INT(3), IN name1 VARCHAR(30))
+BEGIN
+    DECLARE i_date DATE;
+    DECLARE diff INT;
+    DECLARE fine_amt INT;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SELECT 'Table not found';
+
+    -- Retrieve the Date of Issue for the specified Roll_no and Name
+    SELECT DateOfIssue INTO i_date 
+    FROM stud1 
+    WHERE Roll_no = rno1 AND Name = name1;
+
+    -- Calculate the difference in days between the current date and the issue date
+    SELECT DATEDIFF(CURDATE(), i_date) INTO diff;
+
+    -- Determine the fine amount based on the difference in days
+    IF diff >= 15 AND diff <= 30 THEN
+        SET fine_amt = diff * 5;
+        INSERT INTO Fine VALUES (rno1, CURDATE(), fine_amt);
+    ELSEIF diff > 30 THEN
+        SET fine_amt = diff * 50;
+        INSERT INTO Fine VALUES (rno1, CURDATE(), fine_amt);
+    END IF;
+
+    -- Update the status of the book in the Borrower table to 'R'
+    UPDATE Borrower 
+    SET Status = 'R' 
+    WHERE Roll_no = rno1 AND Name = name1;
+END $
+
+DELIMITER ;
+
+CALL a2(6, 'Kiran');
