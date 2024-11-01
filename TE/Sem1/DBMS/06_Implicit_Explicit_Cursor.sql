@@ -15,7 +15,7 @@ create table o_emp(
 -- 2. create new table
 drop table  if exists n_emp;
 create table n_emp(
-    e_id int primary key,
+    e_id int,
     fname varchar(45),
     lname varchar(45),
     salary int
@@ -27,7 +27,7 @@ VALUES
     (1, 'Ayush', 'B', 20000),
     (2, 'Piyush', 'Joih', 30000),
     (3, 'Kumar', 'Yadav', 34000),
-    (4, 'Ash', 'M', 40000),
+	 (4, 'Ash', 'M', 40000),
     (5, 'Ajey', 'N', 30000),
     (6, 'Yash', 'S', 40000),
     (7, 'Ankit', 'Sharma', 25000),
@@ -36,7 +36,7 @@ VALUES
     (10, 'Sneha', 'Patil', 45000);
     
 select * from o_emp;
-select * from n_emp;
+
 
     
     
@@ -106,3 +106,77 @@ DELIMITER ;
 
 -- Step 5: Call the procedure to execute the data transfer
 call copyEmp();
+select * from n_emp;
+-- | e_id | fname   | lname   | salary |
+-- |------|---------|---------|--------|
+-- | 1    | Ayush   | B       | 20000  |
+-- | 3    | Kumar   | Yadav   | 34000  |
+-- | 5    | Ajey    | N       | 30000  |
+-- | 7    | Ankit   | Sharma  | 25000  |
+-- | 11   | Raj     | Kumar   | 32000  |
+-- | 12   | Anjali  | Mehta   | 29000  |
+-- | 13   | Vikas   | Desai   | 37000  |
+-- | 14   | Snehal  | Pawar   | 45000  |
+-- | 15   | Ravi    | Patel   | 31000  |
+-- | 16   | Priya   | Nair    | 33000  |
+-- | 2    | Piyush  | Joih    | 30000  |
+-- | 4    | Ash     | M       | 40000  |
+-- | 6    | Yash    | S       | 40000  |
+-- | 8    | Rohit   | Verma   | 36000  |
+-- | 9    | Neha    | Singh   | 28000  |
+-- | 10   | Sneha   | Patil   | 45000  |
+
+
+
+-- merges the table only between the uper and lower bounds 
+DELIMITER $
+DROP PROCEDURE IF EXISTS mergeEMPwithinBounds;
+CREATE PROCEDURE mergeEMPwithinBounds(IN lb INT, IN ub INT)
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE eno INT;
+    DECLARE old_cursor1 CURSOR FOR 
+        SELECT e_id FROM o_emp WHERE e_id BETWEEN lb AND ub;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    OPEN old_cursor1;
+    
+    getE_id: LOOP
+        IF done THEN
+            LEAVE getE_id;
+        END IF;
+        
+        FETCH old_cursor1 INTO eno;
+        
+        IF NOT EXISTS (SELECT 1 FROM n_emp WHERE e_id = eno) THEN 
+            BEGIN
+                INSERT INTO n_emp
+                SELECT * FROM o_emp
+                WHERE o_emp.e_id = eno;
+            END;
+        END IF;
+    END LOOP;
+    
+    CLOSE old_cursor1;
+END $
+DELIMITER ;
+
+-- Execute the procedure with bounds
+CALL mergeEMPwithinBounds(1, 4);
+
+
+select * from n_emp;
+-- | e_id | fname   | lname   | salary |
+-- |------|---------|---------|--------|
+-- | 1    | Ayush   | B       | 20000  |
+-- | 3    | Kumar   | Yadav   | 34000  |
+-- | 5    | Ajey    | N       | 30000  |
+-- | 7    | Ankit   | Sharma  | 25000  |
+-- | 11   | Raj     | Kumar   | 32000  |
+-- | 12   | Anjali  | Mehta   | 29000  |
+-- | 13   | Vikas   | Desai   | 37000  |
+-- | 14   | Snehal  | Pawar   | 45000  |
+-- | 15   | Ravi    | Patel   | 31000  |
+-- | 16   | Priya   | Nair    | 33000  |
+-- | 2    | Piyush  | Joih    | 30000  |
+-- | 4    | Ash     | M       | 40000  |
