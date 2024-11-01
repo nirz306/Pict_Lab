@@ -182,6 +182,8 @@ values (
         30000,
         2023
     );
+
+
 -- Display all Employee details with Department 'Finance' and 'IT' and Employee first name starting with 'p' or 'h'.
 select *
 from employee
@@ -199,36 +201,41 @@ select distinct count(emp_position)
 from employee;
 -- modifying the employee as we need datatype date in the employee
 alter table employee drop column emp_join_date;
+
 -- adding joining date again
 alter table employee
 add column emp_join_date date;
--- ; Insert Data
+
+-- Insert Data
 update employee
 set emp_join_date = '2020-12-1'
 where emp_id = 1;
+
 -- insetring random dates (generated)
 UPDATE employee
 SET emp_join_date = DATE_ADD('2020-12-01', INTERVAL FLOOR(RAND() * 365) DAY)
 WHERE emp_join_date IS NULL;
+
 --add column  dob to employee table
 alter table employee
 add column emp_dob date;
+
 -- insert random dob
+SET SQL_SAFE_UPDATES = 0; --if not writyten this likely to throw an error 
 update employee
 set emp_dob = date_add('2001-12-01', interval floor(rand() * 365) day)
 where emp_dob is null;
-update employee
-set emp_salary
+SET SQL_SAFE_UPDATES = 1;
+
+-- to get the deatils of the department with maximum project cost 
 select *
-from projects
-order by proj_id desc
-limit 1;
-select *
-from projects
-where proj_id = (
-        select max(proj_id)
-        from projects
+from dept
+where dept_id in (
+        select dept_id from projects 
+        where proj_cost= (SELECT MAX(proj_cost) FROM projects)
     );
+
+
 -- average of project cose
 select avg(proj_cost)
 from projects;
