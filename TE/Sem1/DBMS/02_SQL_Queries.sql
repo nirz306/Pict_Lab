@@ -40,21 +40,18 @@ create table projects(
 --Add Foreign Key in Employees
 alter table employee
 add constraint fk_emp_dept foreign key (dept_id) references dept(dept_id);
+
 --Insert into table dept
 insert into dept(dept_name, dept_location)
-values ("Production", "Banglore");
-insert into dept(dept_name, dept_location)
-values ("Administration", "Mumbai");
-insert into dept(dept_name, dept_location)
-values ("Finance", "Mumbai");
-insert into dept(dept_name, dept_location)
-values ("IT", "Pune");
-insert into dept(dept_name, dept_location)
-values ("Marketing", "Mumbai");
-insert into dept(dept_name, dept_location)
-values ("Bussiness", "Nashik");
-insert into dept(dept_name, dept_location)
-values ("Sales", "Nagpur");
+values 
+("Production", "Banglore"),
+  ("Administration", "Mumbai"),
+("Finance", "Mumbai"),
+("IT", "Pune"),
+("Marketing", "Mumbai"),
+("Bussiness", "Nashik"),
+("Sales", "Nagpur");
+
 -- Insert Data into employees
 -- Insert Data
 insert into employee (
