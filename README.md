@@ -11,4 +11,9 @@ Collection of Lab Assignments of SPPU TE Comp (2019 Pattern) of DBMS, CNS, LP1
 2. [Computer Networks & Security Lab](https://github.com/nirz306/Pict_Lab/tree/main/TE/Sem1/CNS)
 3. [Laboratory Practice 1](https://github.com/nirz306/Pict_Lab/tree/main/TE/Sem1/LP)
 
+
+<div align="center">
+  <img src="https://profile-counter.glitch.me/nirz306/count.svg?"  />
+</div>
+
  
