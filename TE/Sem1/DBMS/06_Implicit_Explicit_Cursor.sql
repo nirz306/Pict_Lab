@@ -5,34 +5,60 @@
 -- Step 1: Create the "old" employee table
 
 
+drop table  if exists o_emp;
 create table o_emp(
-    e_id int,             -- Employee ID (integer)
-    fname varchar(45),    -- First name (up to 45 characters)
-    lname varchar(45),    -- Last name (up to 45 characters)
-    salary int            -- Salary (integer)
+    e_id int,
+    fname varchar(45),
+    lname varchar(45),
+    salary int
 );
-
--- Step 2: Create the "new" employee table
+-- 2. create new table
+drop table  if exists n_emp;
 create table n_emp(
-    e_id int primary key, -- Employee ID as a primary key to enforce uniqueness
-    fname varchar(45),    -- First name (up to 45 characters)
-    lname varchar(45),    -- Last name (up to 45 characters)
-    salary int            -- Salary (integer)
+    e_id int primary key,
+    fname varchar(45),
+    lname varchar(45),
+    salary int
 );
+ 
 
--- Step 3: Insert data into the "old" employee table
-insert into o_emp (e_id, fname, lname, salary)
-values 
+INSERT INTO o_emp (e_id, fname, lname, salary)
+VALUES 
     (1, 'Ayush', 'B', 20000),
     (2, 'Piyush', 'Joih', 30000),
     (3, 'Kumar', 'Yadav', 34000),
     (4, 'Ash', 'M', 40000),
     (5, 'Ajey', 'N', 30000),
-    (6, 'Yash', 'S', 40000);
+    (6, 'Yash', 'S', 40000),
+    (7, 'Ankit', 'Sharma', 25000),
+    (8, 'Rohit', 'Verma', 36000),
+    (9, 'Neha', 'Singh', 28000),
+    (10, 'Sneha', 'Patil', 45000);
+    
+select * from o_emp;
+select * from n_emp;
 
+    
+    
+    INSERT INTO n_emp (e_id, fname, lname, salary)
+VALUES 
+    (1, 'Ayush', 'B', 20000),         -- Same as in o_emp
+    (3, 'Kumar', 'Yadav', 34000),     -- Same as in o_emp
+    (5, 'Ajey', 'N', 30000),          -- Same as in o_emp
+    (7, 'Ankit', 'Sharma', 25000),    -- Same as in o_emp
+    (11, 'Raj', 'Kumar', 32000),      -- Unique entry
+    (12, 'Anjali', 'Mehta', 29000),   -- Unique entry
+    (13, 'Vikas', 'Desai', 37000),    -- Unique entry
+    (14, 'Snehal', 'Pawar', 45000),   -- Unique entry
+    (15, 'Ravi', 'Patel', 31000),     -- Unique entry
+    (16, 'Priya', 'Nair', 33000);     -- Unique entry
+
+    
+
+  
 -- Step 4: Create a procedure with a cursor to transfer data from o_emp to n_emp
 delimiter $
-drop procedure if exists copyData;
+drop procedure if exists copyEmp;
 create procedure copyEmp() 
 begin
     -- Step 4.1: Declare a variable to track the end of cursor
@@ -80,6 +106,3 @@ DELIMITER ;
 
 -- Step 5: Call the procedure to execute the data transfer
 call copyEmp();
-
--- Step 6: Check the data in n_emp to verify that records were transferred correctly
-select * from n_emp;
