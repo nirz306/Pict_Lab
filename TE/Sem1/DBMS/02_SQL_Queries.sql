@@ -6,6 +6,14 @@
 -- Create view (simple), index, sequence and synonym based on above tables.
 -- Note: Use referential integrity constraints while creating tables with on delete cascade
 -- options.
+
+
+--  Delete Department details which location is ‘Mumbai’. 
+-- 6. Find the names of Projects with location ‘pune’ . 
+-- 7. Find the project having cost in between 100000 to 500000. 
+-- 8. Find the project having maximum price and find average of Project cost
+-- 9. Display all employees with Emp _id and Emp name in decreasing order of Emp_lname
+-- 10. Display Proj_name,Proj_location ,Proj_cost of all project started in 2004,2005,2007 
 -- 1. Creating Table Employee;
 ;
 create table employee(
@@ -239,3 +247,11 @@ where dept_id in (
 -- average of project cose
 select avg(proj_cost)
 from projects;
+
+-- Give 10% increase in Salary of the Employee whose joining year is before 1985. 
+UPDATE employee
+SET emp_salary = emp_salary * 1.10
+WHERE YEAR( emp_joindate) < 1985;
+
+
+
