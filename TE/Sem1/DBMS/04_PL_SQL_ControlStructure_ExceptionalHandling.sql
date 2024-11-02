@@ -78,7 +78,7 @@ begin
     set status='R'
     where Roll_no=rno1 and NameOfBook=name1;
   End if;
-End;
+End
 $
 delimiter ;
 
@@ -119,7 +119,7 @@ begin
 		insert into Fine values(rno1,CURDATE(),fine_amt);
 	End if;
     	Update Borrower set status='R' where Roll_no=rno1 and Name=name1;
-End;
+End
 $
 call p3(3,'Nira');
 
