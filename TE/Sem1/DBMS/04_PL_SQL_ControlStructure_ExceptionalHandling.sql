@@ -58,7 +58,7 @@ begin
 	select DateofIssue into i_date from Borrower where  Roll_no =rno1
 	and NameOfBook=name1;
 	SELECT DATEDIFF(CURDATE(), i_date) into diff; --The DATEDIFF() function returns the difference in days between two date values.
-end;
+end
 $
 delimiter ;
 
