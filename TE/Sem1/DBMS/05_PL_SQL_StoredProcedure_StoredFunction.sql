@@ -1,3 +1,7 @@
+-- Named PL/SQL Block: PL/SQL Stored Procedure and Stored Function.
+-- Write a Stored Procedure namely proc_Grade for the categorization of students. If marks scored by students in the examination is <= 1500 and marks >= 990, then the student will be placed in the distinction category. If marks are between 989 and 900, the category is the first class. If marks 899 and 825, the category is Higher Second Class.
+-- Write a PL/SQL block to use the procedure created with the above requirement. Stud_Marks(name, total_marks) Result(Roll, Name, Class)
+
 create table stud_marks(
     id int primary key auto_increment,
     roll int,
