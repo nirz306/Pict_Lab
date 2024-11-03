@@ -5,65 +5,88 @@
 -- Frame problem statement for writing Database Triggers of all types, inline with above statement. The problem statement 
 -- should clearly state the requirements.
 
-
---1. Create table Libray:
-create table library(
-    bookid int,
-    name varchar(30),
-    author varchar(30)
+--create table library 
+CREATE TABLE Library (
+	book_id INT UNIQUE PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	book_name VARCHAR(100) DEFAULT '',
+	isbn INT UNIQUE NOT NULL,
+	page_count INT,
+	author VARCHAR(100),
+	year DATE,
+	copies_sold INT
 );
---2. Create table library_audit:
-create table library_audit(
-    bookid int,
-    name varchar(30),
-    author varchar(30)
-)
 
---3. insert data into library
-insert into library(bookid,name,author)
-values
-(1,"C","Ayush"),
-(2,"Java","Piyush"),
-(3,"DSA","Karan"),
-(4,"DS","Amir"),
-(5,"CPP","Tej");
+--creating a library audit for logging the updating values 
+CREATE TABLE Library_Audit (
+	update_id INT UNIQUE PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	book_id INT,
+	old_book_name VARCHAR(100) DEFAULT '',
+	old_isbn INT UNIQUE NOT NULL,
+	old_page_count INT,
+	old_author VARCHAR(100),
+	old_year DATE,
+	old_copies_sold INT
+);
 
---4.  Create row trigger before update
+INSERT INTO Library VALUES 
+	(1,'totam',14448882,425,'expedita','2023-03-19',43849117),
+	(2,'voluptates',48822856,333,'sit','1974-08-27',11021007),
+	(3,'quae',10721240,165,'voluptates','2011-05-06',72946253),
+	(4,'impedit',77143556,133,'quam','1995-01-13',20492263),
+	(5,'cum',57158171,667,'ipsa','2000-01-26',29278743),
+	(6,'officia',23698255,804,'temporibus','2007-11-06',77006951),
+	(7,'rerum',52692996,871,'numquam','2012-08-23',23321626),
+	(8,'perspiciatis',80040097,697,'sunt','2006-05-02',80292082),
+	(9,'voluptate',78591954,642,'voluptatem','1990-07-11',23638319),
+	(10,'iure',37495366,644,'non','2020-03-08',59228850),
+	(11,'repellendus',29416436,841,'in','1982-03-28',63717696),
+	(12,'earum',14016995,778,'officia','1971-09-02',43033034),
+	(13,'quasi',46762666,855,'magni','1973-04-12',22185173),
+	(14,'nihil',12714950,583,'aspernatur','1991-07-24',83182555),
+	(15,'perspiciatis',86876793,590,'cum','1979-03-02',89074976),
+	(16,'qui',71512407,331,'maiores','2009-09-11',56650470),
+	(17,'neque',31651442,511,'perspiciatis','1980-11-07',18051664),
+	(18,'aut',77667078,386,'officia','1990-09-02',13554780),
+	(19,'qui',67772169,114,'expedita','2006-01-31',35066713),
+	(20,'quae',78427689,222,'quaerat','1992-07-22',54087575)
+;
 
---UPDATE Trigger
-create trigger libray_update_trigger
-before update on library
-for each row
-begin
--- This handles the duplicate keyword errors
-    declare continue handler for 1062
-    begin 
-  -- Raise an error message if there is a duplicate key error
-        signal sqlstate '45000'
-        set message_text = 'Duplicate key error in trigger';
-    end;
-    insert into library_audit(bookid,name,author)
-    values(old.bookid,old.name,old.author);
-end;
+DELIMITER $$
+CREATE TRIGGER update_trig
+BEFORE UPDATE ON Library
+FOR EACH ROW
+BEGIN
 
--- DELETE Trigger
-create trigger library_delete_trigger
-before delete on library
-for each row
-begin   
-    declare continue handler for 1062
-    begin
-        signal sqlstate '45000' set message_text = 'Duplicate key error in trigger';
-    end;
-    insert into library_audit(bookid,name,author)
-    values(old.bookid,old.name,old.author);
-end;
+	INSERT INTO Library_Audit (book_id, old_book_name, old_isbn, old_page_count, old_author, old_year,old_copies_sold) VALUES 
+	(OLD.book_id, OLD.book_name, OLD.isbn, OLD.page_count, OLD.author, OLD.year, OLD.copies_sold);
 
-create trigger library_delete_statement_trigger
-before update on library
-begin
+END $$
+DELIMITER ;
+
+ 
+
+UPDATE Library
+SET book_name = 'haha totam' WHERE book_id = 1;
+
+select * from Library_Audit;
+
+DELIMITER $$
+CREATE TRIGGER error_trig
+BEFORE UPDATE ON Library
+FOR EACH ROW
+BEGIN
+	IF NEW.book_name = OLD.book_name THEN
+	SIGNAL SQLSTATE '45000'
+	SET message_text = 'Same value of updated book';
+	END IF;
+END $$
+DELIMITER ; 
+
+UPDATE Library
+SET book_name = 'quae' WHERE book_id = 3;
     insert into library_audit(bookid,name,author)
     select bookid, name,author
     from library
     where bookid in (select old.bookid from old);
 end;
+ --order of execution: error_trigger->if no error ->update_trigger
