@@ -84,9 +84,5 @@ DELIMITER ;
 
 UPDATE Library
 SET book_name = 'quae' WHERE book_id = 3;
-    insert into library_audit(bookid,name,author)
-    select bookid, name,author
-    from library
-    where bookid in (select old.bookid from old);
-end;
+    
  --order of execution: error_trigger->if no error ->update_trigger
