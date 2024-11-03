@@ -63,7 +63,7 @@ public class JDBC
                 	// display result
                 	System.out.println("| ID |      Name      |  Position  |  Salary  |");
                 	System.out.println("---------------------------------");
-                	while (rs.next())
+                	while (rs.next())  //advances the cursor to the next row of data in the result set.
                 	{
                 		// indexing starts from 1
                 		id = rs.getInt(1);
