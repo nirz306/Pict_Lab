@@ -171,7 +171,7 @@ db.orders.aggregate([
 
 
 //this is different schema (prev ques) however the use of unwind is imp 
-teachers.aggregate([ { $unwind: "$qualification" }, { $group: { _id: "$qualification", teacherCount: { $sum: 1 } } }] )
+db.teachers.aggregate([ { $unwind: "$qualification" }, { $group: { _id: "$qualification", teacherCount: { $sum: 1 } } }] )
 // [
 //   { _id: 'MTech', teacherCount: 6 },
 //   { _id: 'PhD', teacherCount: 10 },
