@@ -177,3 +177,12 @@ db.teachers.aggregate([ { $unwind: "$qualification" }, { $group: { _id: "$qualif
 //   { _id: 'PhD', teacherCount: 10 },
 //   { _id: 'BTech', teacherCount: 1 }
 // ]
+
+//use of indexing 
+db.orders.createIndex({ product: 1 });
+//compare the executionstats before and after performing the indexing 
+//compare the documents examined in both cases
+db.orders.aggregate([
+    { $match: { product: 'toothbrush' } },
+    { $group: { _id: "$customer", spending: { $sum: "$price" } } }
+]).explain("executionStats");
