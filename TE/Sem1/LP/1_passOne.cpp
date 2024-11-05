@@ -5,7 +5,7 @@ class Pass1
 {
 public:
     map<string, pair<string, string>> opcode;
-    map<string, pair<int, string>> symtab;
+    map<string, pair<int, string>> symtab; //label,lc,index
     vector<pair<string, int>> littab;
     vector<string> pooltab;
     int litindex = 0, lc = -1;
