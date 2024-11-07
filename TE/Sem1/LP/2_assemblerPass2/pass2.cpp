@@ -45,8 +45,7 @@ public:
 
             //opcode can be imperative statements or dl
             if (opcode == "(IS,") {
-                string code;
-                ss >> code;
+                string code;  ss >> code;
                 string instruction = code.substr(0, code.size() - 1); // Remove the closing parenthesis
                 fout << location << " " << instruction << " "; // Write location and opcode to file
 
@@ -68,17 +67,16 @@ public:
                     }
                 }
             } else if (opcode == "(DL,") {
-                string directive;
-                ss >> directive;
+                string directive; ss >> directive;
                 if (directive == "01)") { // DC
-                    ss >> word;
-                    ss>>word;
+                    ss >> word;  ss>>word;
+                    // 110 (DL, 01) (C, 7) -> fetching 7 from it 
                     fout << location << " 00 00 " << word.substr(0, word.size() - 1) << "\n"; // Write DC with constant
                 } else if (directive == "02)") { 
                     fout << location << " 00 00 00\n"; 
                 }
             }
-            fout << "\n"; // New line after each machine instruction
+            fout << "\n";  
         }
     }
 
