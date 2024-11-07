@@ -43,6 +43,7 @@ public:
             string location, opcode, operand;
             ss >> location >> opcode; // Read the location and opcode
 
+            //opcode can be imperative statements or dl
             if (opcode == "(IS,") {
                 string code;
                 ss >> code;
@@ -50,6 +51,8 @@ public:
                 fout << location << " " << instruction << " "; // Write location and opcode to file
 
                 while (ss >> word) {
+                    //either a symbol, constant,or literal
+                    //then fetch the index after it and find corresponding location via symtab or litatab
                     if (word == "(S,") {
                         ss >> operand;
                         int symIndex = stoi(operand.substr(0, operand.size() - 1)) - 1;
