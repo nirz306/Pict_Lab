@@ -4,8 +4,8 @@ using namespace std;
 class Pass_02 {
     ifstream sy, li, fin;
     ofstream fout;
-    vector<pair<string, int>> symtable;
-    vector<pair<string, int>> littable;
+    vector<pair<string, int>> symtable;  //label,address AGAIN 104
+    vector<pair<string, int>> littable;   //label,address
 
 public:
     void input() {
