@@ -183,6 +183,59 @@ class  RR{
     }
     
 };
+
+class Prirority{
+    vector<tuple<int,int,int>> at_pri_bt;
+    int At,Bt,prior;
+    vector<int>ct;
+     vector<int> tat;
+    vector<int> wt;
+    public:
+        void input(){
+            int n ; cout<<"How many process?-"; cin>>n;
+            for(int i=0;i<n;i++){
+                cout<<"Enter the arrival time of P"<<i<<":"; cin>>At;
+                cout<<"Enter the burst time of P"<<i<<":"; cin>>Bt;
+                cout<<"Enter the prirority of P"<<i<<":"; cin>>prior;
+                at_pri_bt.push_back({prior,At,Bt});
+            }
+        }
+
+        void execute_ct(){
+            sort(at_pri_bt.begin()+1,at_pri_bt.end());
+            int last_completed_time=0;
+            for(auto i:at_pri_bt){
+                if(get<1>(i) <=last_completed_time){
+                    last_completed_time+=get<2>(i);    
+                }
+                else   
+                { last_completed_time=get<1>(i)+get<2>(i);}
+                ct.push_back(last_completed_time);
+            }
+        }
+
+          void execute_tat_wt(){
+        int j=0;
+       for(auto i:at_pri_bt){
+            int Tat = ct[j]-get<1>(i);
+            int Wt = Tat-get<2>(i);
+            wt.push_back(Wt);
+            tat.push_back(Tat);
+            j++;
+       }
+    }
+
+    void display(){
+        int j=0;
+        cout<<"Prirority "<<"Arrival Time "<<"  Burst Time "<<"  Completion Time"<<"  Turn Around Time"<<"  Waiting Time"<<endl;
+        for(auto i:at_pri_bt){
+            cout<<get<0>(i)<<"                "<<get<1>(i)<<"             "<<get<2>(i)<<"                  "<<ct[j]<<"              "<<tat[j]<<"              "<<wt[j]<<endl;
+            j++;
+        }
+    }
+
+
+};
 int main(){
     // FCFS obj1;
     // obj1.input();
@@ -194,8 +247,13 @@ int main(){
     // obj2.execute_ct();
     // obj2.execute_tat_wt();
     // obj2.display();
-    RR obj3;
-    obj3.input();
-    obj3.execute_ct();
-    obj3.display();
+    // RR obj3;
+    // obj3.input();
+    // obj3.execute_ct();
+    // obj3.display();
+    Prirority p1;
+    p1.input();
+    p1.execute_ct();
+    p1.execute_tat_wt();
+    p1.display();
 }
