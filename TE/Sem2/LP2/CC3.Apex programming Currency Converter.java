@@ -1,3 +1,7 @@
+name->developer console->create two files there, apex classes and pages ->preview 
+the controller="" this should have the name of the class written in apex class code 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 <apex:page controller="CurrencyConverter" applyBodyTag="false" showHeader="true" sidebar="false">
     <apex:form >
         <div style="max-width: 600px; margin: 40px auto; padding: 30px; border: 1px solid #ccc; 
