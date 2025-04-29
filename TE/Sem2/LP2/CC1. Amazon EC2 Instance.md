@@ -9,10 +9,10 @@ yum  install -y httpd
 systemctl status httpd    
 mkdir temp    
 cd temp/  
-#wget [link of the website in zip]  
+#wget https://www.free-css.com/assets/files/free-css-templates/download/page296/inance.zip  
 ls lrt  
-unzip complex.zip  
-cd complex  
+unzip inance.zip  
+cd inance.html 
 ls -lrt  
 mv * /var/www/html/  
 cd /var/www/html/  
