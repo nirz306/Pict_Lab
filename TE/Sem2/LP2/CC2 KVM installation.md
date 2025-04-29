@@ -1,6 +1,4 @@
-# Setting Up KVM on Ubuntu
-
-This guide provides the necessary commands to install and run KVM (Kernel-based Virtual Machine) on an Ubuntu system. Each command is explained briefly with expected outcomes.
+# Setting Up KVM on Ubuntu  
 
 ## 1. Update Package Lists
 ```bash
