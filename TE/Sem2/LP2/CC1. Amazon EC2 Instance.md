@@ -9,7 +9,7 @@ yum  install -y httpd
 systemctl status httpd
 mkdir temp
 cd temp/
-# wget [link of the website in zip]
+#wget [link of the website in zip]
 ls lrt
 unzip complex.zip
 cd complex
