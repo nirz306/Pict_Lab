@@ -1,9 +1,12 @@
+//finding the minimum path to reach from 0 to all the other nodes
+//data structure used is min heap/ priorority queue and array to store the minimum distance from 0th node to that particular node 
 #include<bits/stdc++.h>
 using namespace std;
 
 vector<int> shortestPath(vector<vector<pair<int,int>>> adjList,int n){
     priority_queue<pair<int,int>, vector<pair<int,int>>,greater<pair<int,int>> >pq;
     vector<int> dist_arr(n,INT_MAX);
+    //assuming that the starting node is 0
     dist_arr[0] = 0;
     pq.push({0,0});
 
