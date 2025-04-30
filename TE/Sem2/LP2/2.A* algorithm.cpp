@@ -43,7 +43,8 @@ void printMatrix(int mat[N][N], int g, int h) {
 
 // Function to initiate a new node
 Node *newNode(int mat[N][N], int x, int y, int nx, int ny, int g,
-              Node *parent) {
+              Node *parent) 
+{
     Node *node = new Node;
     node->parent = parent;  // set this ad parent
     for (int i = 0; i < N; i++) {
