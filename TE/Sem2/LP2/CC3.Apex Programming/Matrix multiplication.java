@@ -5,10 +5,14 @@ public class MatrixMultiplicationController {
     public String result { get; set; }
 
     public void multiplyMatrices() {
-        List<List<Integer>> m1 = parseMatrix(input1);
-        List<List<Integer>> m2 = parseMatrix(input2);
-        List<List<Integer>> product = multiply(m1, m2);
-        result = JSON.serialize(product);
+        try {
+            List<List<Integer>> m1 = parseMatrix(input1);
+            List<List<Integer>> m2 = parseMatrix(input2);
+            List<List<Integer>> product = multiply(m1, m2);
+            result = JSON.serialize(product);
+        } catch (Exception e) {
+            result = 'Error: ' + e.getMessage(); // gracefully show the error
+        }
     }
 
     private List<List<Integer>> parseMatrix(String input) {
