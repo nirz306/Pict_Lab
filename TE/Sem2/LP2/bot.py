@@ -21,24 +21,24 @@ intent_examples = {
 # Responses
 intent_responses = {
     "greeting": "Welcome to Brew Café! What can I get for you today?",
-    "menu": "Here's our menu:\n☕ Coffee\n🍵 Tea\n🥐 Croissant\n🍰 Cake",
+    "menu": "Here's our menu:\n Coffee\nTea\n Croissant\n Cake",
     "order": "Sure! What would you like to order?",
     "hours": "We're open from 8 AM to 8 PM every day!",
     "goodbye": "Thanks for visiting Brew Café. Have a great day!",
-    "thanks": "You're welcome! 😊",
+    "thanks": "You're welcome! ",
     "reservation": "Sure! We can reserve a table for you. For how many people?",
-    "location": "We're located at 123 Coffee Street, Brewtown ☕📍",
+    "location": "We're located at 123 Coffee Street, Brewtown ",
     "wifi": "Yes! Free Wi-Fi is available. The password is brewcoffee123.",
     "delivery": "Yes, we offer home delivery within 5 km. 🍽",
-    "negative": "No problem! How about trying something else from our menu? ☕🍰🍵"
+    "negative": "No problem! How about trying something else from our menu?"
 }
 
 # Updated detailed items with prices and no follow-up questions
 detailed_items = {
-    "cake": "🍰 We have:\n- Chocolate Cake 🍫: ₹150\n- Red Velvet ❤: ₹180\n- Cheesecake 🍰: ₹200\n(Available in egg & eggless options)",
-    "coffee": "☕ Coffee options:\n- Espresso: ₹100\n- Cappuccino: ₹120\n- Latte: ₹130",
-    "tea": "🍵 Tea options:\n- Green Tea: ₹80\n- Masala Chai: ₹70\n- Lemon Tea: ₹75",
-    "croissant": "🥐 Croissants:\n- Butter: ₹90\n- Almond: ₹110\n- Chocolate: ₹120"
+    "cake": " We have:\n- Chocolate Cake : ₹150\n- Red Velvet ❤: ₹180\n- Cheesecake : ₹200\n(Available in egg & eggless options)",
+    "coffee": " Coffee options:\n- Espresso: ₹100\n- Cappuccino: ₹120\n- Latte: ₹130",
+    "tea": "Tea options:\n- Green Tea: ₹80\n- Masala Chai: ₹70\n- Lemon Tea: ₹75",
+    "croissant": "Croissants:\n- Butter: ₹90\n- Almond: ₹110\n- Chocolate: ₹120"
 }
 
 
@@ -54,7 +54,7 @@ vectorizer = TfidfVectorizer()
 example_vectors = vectorizer.fit_transform(all_examples)
 
 # UI Setup
-st.title("☕ Brew Café Chatbot")
+st.title("Brew Café Chatbot")
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
@@ -82,7 +82,7 @@ if user_input:
             if best_match_intent == "order":
                 for item in detailed_items:
                     if item in user_input.lower() and "don't" not in user_input.lower() and "do not" not in user_input.lower():
-                        response += f"\n\n👉 {detailed_items[item]}"
+                        response += f"\n\n {detailed_items[item]}"
                         break
 
         st.session_state.chat_history.append(("User", user_input))
@@ -91,7 +91,7 @@ if user_input:
 # Display chat
 for speaker, message in st.session_state.chat_history:
     if speaker == "User":
-        st.markdown(f"🧑 **You:** {message}")
+        st.markdown(f" **You:** {message}")
     else:
-       st.markdown(f"🤖 **{speaker}:** {message}")
+       st.markdown(f" **{speaker}:** {message}")
 
