@@ -1,129 +1,119 @@
-#include <bits/std.c++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
 class Graph{
-    int n;
-    vector<vector<int>>graph;
-
+    private:
+    int n ;
+    vector<vector<int>> adjList;
+    
     public:
-
-    //initialize n and graph of size n
-    Graph(int n): n(n), graph(n){}
+    Graph(int n):n(n),adjList(n){}
 
     void buildGraph();
-    void printGraph();
-    void bfsIterative();
-    void dfsRecursive();
-    void dfsRecursiveHelper(int node, vector<int>&visited);
-    void dfsIterative();
+    void bfs();
+    void dfs_recurssive();
+    void dfs_iterative();
+    void dfs_helper(int node, vector<bool>&vis);
+
 
 };
 
 void Graph::buildGraph(){
-    cout<<"To stop,  enter -1 for source and destination"<<endl;
-    int source;
-    int destination;
+    cout<<"press -1 to exit "<<endl;
     while(true){
-        cout<<"Enter the source: ";
-        cin>>source;
-        cout<<"Enter the destination: ";
-        cin>>destination;
+        int startNode, endNode;
+        cout<<"Enter the start node: "; cin>>startNode;
+        cout<<"Enter the end node: "; cin>>endNode;
 
-        if(source == -1 && destination == -1){
-            break;
-        }
-        if(source >= 0 && source < n && destination >= 0 && destination < n){
-            graph[source].push_back(destination);
-            graph[destination].push_back(source);
-        }
+        if(startNode==-1 || endNode==-1) break;
         else{
-            cout<<"Enter values of valid range"<<endl;
+            if(startNode>=0 && startNode<n && endNode>=0 && endNode<n){
+                adjList[startNode].push_back(endNode);
+                adjList[endNode].push_back(startNode);
+            }
+            else{
+                cout<<"Enter valid inputs!!!"<<endl;
+            }
         }
     }
 }
 
-void Graph::printGraph(){
-    for(int i = 0; i < this->n; i++){
-        cout<<i<<":";
-        for(int num: graph[i]){
-            cout<<num<<" ";
-        }
-        cout<<endl;
-    }
-}
+void Graph::bfs(){
+    vector<bool> vis(n, false);
+    queue<int> que;
+    que.push(0);
+    vis[0] = true; // mark as visited when pushing into the queue
 
-void Graph::bfsIterative(){
-    cout<<"BFS traversal is: ";
-    vector<int>visited(n, 0);
-    queue<int>q;
-    q.push(0);
-    visited[0] = 1;
-    cout<<0<<" ";
-    while(!q.empty()){
-        int s = q.size();
+    while(!que.empty()){
+        int levelSize = que.size();  // number of nodes at current level
+        
+        // Print all nodes at this level
+        for(int i = 0; i < levelSize; i++){
+            int node = que.front();
+            que.pop();
+            cout << node << " ";
 
-        for(int i = 0; i < s; i++){
-            int ele = q.front();
-            q.pop();
-
-            for(int num : graph[ele]){
-                if(visited[num] == 0){
-                    visited[num] = 1;
-                    q.push(num);
-                    cout<<num<<" ";
+            for(int neighbor : adjList[node]){
+                if(!vis[neighbor]){
+                    vis[neighbor] = true;  // mark as visited when enqueued
+                    que.push(neighbor);
                 }
             }
         }
-        
+
+        cout << endl; // move to the next line after each level
     }
 }
 
-void Graph::dfsRecursiveHelper(int node, vector<int>&visited){
-    visited[node] = 1;
+void Graph::dfs_helper(int node, vector<bool>&vis){
     cout<<node<<" ";
-
-    for(int num: graph[node]){
-        if(visited[num] == 0){
-            dfsRecursiveHelper(num, visited);
+    vis[node] = true;
+    //recurssive calls
+    for(int i=0;i<adjList[node].size();i++){ 
+        int num = adjList[node][i];
+        if(!vis[num]){
+           dfs_helper(num,vis);
         }
     }
 }
 
-void Graph::dfsRecursive(){
-    vector<int>visited(n, 0);
-    cout<<"DFS Recursive traversal is: ";
-    dfsRecursiveHelper(0, visited);
+void Graph::dfs_recurssive(){
+    //declare a visited array 
+    vector<bool>vis(n,false);
+    dfs_helper(0,vis);
 }
 
-void Graph::dfsIterative(){
-    cout<<"DFS Iterative is: ";
+void Graph::dfs_iterative(){
+    //using stack 
+    vector<bool>visited(n,false);
     stack<int>st;
-    vector<int>visited(n, 0);
     st.push(0);
-    visited[0] = 1;
+    visited[0]=true;
 
     while(!st.empty()){
-        int ele = st.top();
+        int node = st.top();
         st.pop();
-        cout<<ele<<" ";
-
-        for(int num: graph[ele]){
-            if(visited[num] == 0){
-                visited[num] = 1;
+        cout<<node<<" ";
+        //if not visited then push in stack 
+        for(int i=adjList[node].size()-1;i>=0;i--){ 
+            int num = adjList[node][i];
+            if(!visited[num]){
+                visited[num]=true;
                 st.push(num);
             }
         }
     }
-    
 }
 
 int main(){
-    Graph g(5);
-    g.buildGraph();
-    g.printGraph();
-    g.bfsIterative();
-    cout<<endl;
-    g.dfsRecursive();
-    cout<<endl;
-    g.dfsIterative();
+    int n =6;
+    Graph G(n);
+    G.buildGraph();
+    cout<<"BFS traversal: "<<endl;
+    G.bfs();
+    cout<<"Recurssive DFS: "<<endl;
+    G.dfs_recurssive();
+    cout<<"\nIterative DFS: "<<endl;
+    G.dfs_iterative();
+
 }
