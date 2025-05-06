@@ -1,164 +1,156 @@
 // ---------------------------------------------------------------Backtracking------------------------------------------------------------------------------------------------
-class Solution {
-     public:
-    bool isSafe1(int row, int col, vector < string > board, int n) {
-      // check upper element
-      int duprow = row;
-      int dupcol = col;
+#include<bits/stdc++.h>
+using namespace std;
 
-      while (row >= 0 && col >= 0) {
-        if (board[row][col] == 'Q')
-          return false;
+//safe function 
+bool isSafe(int row, int col, vector<vector<int>>board, int n){
+    //creating duplicates 
+    int dupRow = row;
+    int dupCol = col;
+
+    //right bottom to left top up 
+    while(row>=0 && col>=0){
+        if(board[row][col]==1) return false;
         row--;
         col--;
-      }
+    }
+    row=dupRow;
+    col= dupCol;
 
-      col = dupcol;
-      row = duprow;
-      while (col >= 0) {
-        if (board[row][col] == 'Q')
-          return false;
-        col--;
-      }
-
-      row = duprow;
-      col = dupcol;
-      while (row < n && col >= 0) {
-        if (board[row][col] == 'Q')
-          return false;
+    //right top to left bottom down 
+    while(row<n && col>=0){
+        if(board[row][col]==1) return false;
         row++;
         col--;
-      }
-      return true;
+    }
+    row=dupRow;
+    col= dupCol;
+
+    while(col>=0){
+        if(board[row][col]==1) return false;
+        col--;
     }
 
-  public:
-    void solve(int col, vector < string > & board, vector < vector < string >> & ans, int n) {
-      if (col == n) {
+    return true;
+
+}
+
+//solve function
+void solve(int col,int n, vector<vector<int>>&board, vector<vector<vector<int>>>&ans){
+    //base case
+    if(col==n){
+         
         ans.push_back(board);
         return;
-      }
-      for (int row = 0; row < n; row++) {
-        if (isSafe1(row, col, board, n)) {
-          board[row][col] = 'Q';
-          solve(col + 1, board, ans, n);
-          board[row][col] = '.';
+    }
+    //calling out all the rows 
+    for(int row=0;row<n;row++){
+        //if safe then place it 
+        if(isSafe(row,col,board,n)){
+            //place it 
+            board[row][col] = 1;
+            solve(col+1,n,board,ans);
+            board[row][col] = 0; //backtracking 
         }
-      }
     }
-public:
-    vector<vector<string>> solveNQueens(int n) {
-        vector < vector < string >> ans;
-      vector < string > board(n);
-      string s(n, '.');
-      for (int i = 0; i < n; i++) {
-        board[i] = s;
-      }
-      solve(0, board, ans, n);
-      return ans;
-    }
-};
 
+}
+
+//backtracking code 
+int main(){
+    vector<vector<vector<int>>> ans;
+    int n; 
+    cout<<"Enter n: "; cin>>n;
+    cout<<endl;
+    vector<vector<int>> board(n,vector<int>(n,0));
+    solve(0,n,board,ans);
+    
+    for(int i=0;i<ans.size();i++){
+        //this is matrix below 
+        vector<vector<int>> b = ans[i];
+        for(int j=0;j<n;j++){
+            for(int k=0;k<n;k++){
+                cout<<b[j][k]<<" ";
+            }
+            cout<<endl;
+        }
+        cout<<endl;
+        cout<<"------------------------------------------------------"<<endl;
+        cout<<endl;
+    }
+    
+}
 
 // --------------------------------------------------------------------Branch and Bound--------------------------------------------------------------------------------------
-#include<bits/stdc++.h> 
-using namespace std; 
-int N; 
+#include <bits/stdc++.h>
+using namespace std;
 
+// safe function
+bool isSafe(vector<bool> &left_diagonal, vector<bool> &right_diagonal, vector<bool> &rows, int n, int row, int col)
+{
+    if (rows[row] == true || left_diagonal[row + col] == true || right_diagonal[col + n - row - 1] == true)
+        return false;
+    return true;
+}
 
-// function for printing the solution 
-void printSol(vector<vector<int>>board) 
-{ 
-for(int i = 0;i<N;i++){ 
-	for(int j = 0;j<N;j++){ 
-		cout<<board[i][j]<<" "; 
-	} 
-	cout<<"\n"; 
-} 
-} 
+void solve(vector<bool> &left_diagonal, vector<bool> &right_diagonal, vector<bool> &rows, int n, vector<vector<int>> &board, int col, vector<vector<vector<int>>> &ans)
+{
+    // base case
+    if (col == n)
+    {
+        ans.push_back(board);
+        return;
+    }
+    for (int row = 0; row < n; row++)
+    {
+        if (isSafe(left_diagonal, right_diagonal, rows, n, row, col))
+        {
+            // insert then and mark diagonals true
+            board[row][col] = 1;
+            left_diagonal[row + col] = true;
+            right_diagonal[col + n - row - 1] = true;
+            rows[row] = true;
 
-/* Optimized isSafe function 
-isSafe function to check if current row contains or current left diagonal or current right diagonal contains any queen or not if 
-yes return false 
-else return true 
-*/
+            solve(left_diagonal, right_diagonal, rows, n, board, col+1,ans);
 
-bool isSafe(int row ,int col ,vector<bool>rows , vector<bool>left_digonals ,vector<bool>Right_digonals) 
-{ 
-	
-if(rows[row] == true || left_digonals[row+col] == true || Right_digonals[col-row+N-1] == true){ 
-	return false; 
-} 
-	
-return true; 
-} 
+            //bnactracking
+            board[row][col] = 0;
+            left_diagonal[row + col] = false;
+            right_diagonal[col + n - row - 1] = false;
+            rows[row] = false;
 
-// Recursive function to solve N-queen Problem 
-bool solve(vector<vector<int>>& board ,int col ,vector<bool>rows , vector<bool>left_digonals ,vector<bool>Right_digonals) 
-{	 
-	// base Case : If all Queens are placed 
-	if(col>=N){ 
-		return true; 
-	} 
+        }
+    }
+}
 
-	/* Consider this Column and move in all rows one by one */
-	for(int i = 0;i<N;i++) 
-	{ 
-		if(isSafe(i,col,rows,left_digonals,Right_digonals) == true) 
-		{ 
-			rows[i] = true; 
-			left_digonals[i+col] = true; 
-			Right_digonals[col-i+N-1] = true; 
-			board[i][col] = 1; // placing the Queen in board[i][col] 
-				
-				/* recur to place rest of the queens */
+int main()
+{
+    vector<vector<vector<int>>> ans;
+    int n;
+    cout << "Enter n: ";
+    cin >> n;
+    cout << endl;
+    vector<vector<int>> board(n, vector<int>(n, 0));
+    vector<bool> left_diagonal(2 * n - 1, false);
+    vector<bool> right_diagonal(2 * n - 1, false);
+    vector<bool> rows(n, false);
 
-			if(solve(board,col+1,rows,left_digonals,Right_digonals) == true){ 
-				return true; 
-			} 
-				
-			// Backtracking 
-			rows[i] = false; 
-			left_digonals[i+col] = false; 
-			Right_digonals[col-i+N-1] = false; 
-			board[i][col] = 0; // removing the Queen from board[i][col] 
+    solve(left_diagonal,right_diagonal,rows,n,board,0,ans);
 
-		} 
-	} 
-
-		return false; 
-} 
-
-
-int main() 
-{ 
-// Taking input from the user 
-
-cout<<"Enter the no of rows for the square Board : "; 
-cin>>N; 
-
-
-// board of size N*N 
-vector<vector<int>>board(N,vector<int>(N,0)); 
-
-
-	// array to tell which rows are occupied 
-vector<bool>rows(N,false);		 
-
-// arrays to tell which diagonals are occupied					 
-vector<bool>left_digonals(2*N-1,false); 
-vector<bool>Right_digonals(2*N-1,false); 
-
-
-bool ans = solve(board , 0, rows,left_digonals,Right_digonals); 
-
-if(ans == true){ 
-
-	// printing the solution Board 
-	printSol(board); 
-} 
-else{ 
-	cout<<"Solution Does not Exist\n"; 
-} 
-} 
- 
+    for (int i = 0; i < ans.size(); i++)
+    {
+        // this is matrix below
+        vector<vector<int>> b = ans[i];
+        for (int j = 0; j < n; j++)
+        {
+            for (int k = 0; k < n; k++)
+            {
+                cout << b[j][k] << " ";
+            }
+            cout << endl;
+        }
+        cout << endl;
+        cout << "------------------------------------------------------" << endl;
+        cout << endl;
+    }
+}
