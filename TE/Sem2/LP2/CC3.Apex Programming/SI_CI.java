@@ -1,94 +1,52 @@
-public class SimpleIntrestCalculator {
-    public String principle{get;set;}
-    public String years{get;set;}
-    public String intrest{get;set;}
-    public decimal simpleinterest{get;set;}
-    public decimal compoundinterest{get;set;}
+public class SimpleCompoundCalculator {
+    public Double principle { get; set; }
+    public Double years { get; set; }
+    public Double intrest { get; set; }
     public String errorMessage { get; set; }
-    
-    public SimpleIntrestCalculator(){
-        principle='';
-        years='';
-        intrest='';
-        errorMessage='';
-    }
-    
-    public void calculateSI(){
-        errorMessage='';
-        if (!isNumeric(principle)) {
-            errorMessage = 'Please enter a valid Principle Amount';
-            return;
-        }
-        if ( !isNumeric(years)) {
-            errorMessage = 'Please enter valid no of years.';
-            return;
-        }
-        if ( !isNumeric(intrest)) {
-            errorMessage = 'Please enter a valid rate of interest';
-            return;
-        }
-        
-        Decimal P= Decimal.valueOf(principle);
-        Decimal N= Decimal.valueOf(years);
-        Decimal R= Decimal.valueOf(intrest);
-        
-         if (P < 0) {
-            errorMessage = 'Please enter a non-negative principle amount.';
-            return;
-        }
-        
-        if (N<0) {
-            errorMessage = 'Please enter a non-negative years.';
-            return;
-        }
-        
-         if (R<0) {
-            errorMessage = 'Please enter a non-negative rate of inetrest.';
-            return;
-        }
 
-        simpleinterest = ((p*n*r)/100)+p;    
-       
-    }
-    
-     public Boolean isNumeric(String value) {
-        try {
-             Decimal d = Decimal.valueOf(value);
-            return true;
-        } catch (Exception e) {
-            return false;
+    public Double simpleinterest { get; set; }
+    public Double compoundinterest { get; set; }
+
+    public void calculateSI() {
+        if (principle == null || years == null || intrest == null) {
+            errorMessage = 'Please fill in all the fields.';
+            simpleinterest = null;
+            compoundinterest = null;
+            return;
         }
+        
+        errorMessage = '';
+        simpleinterest = (principle * years * intrest) / 100;
+        compoundinterest = principle * Math.pow(1 + intrest / 100, years) - principle;
     }
-    
-     
-    
 }
+
 //-----------------------------------------------------------------------------------------------------
 
-<apex:page controller="SimpleIntrestCalculator">
- 
-    <apex:form > 
-		
-             
-           
-    	<label >Enter Principle Amount</label>
-    	<apex:inputText value="{!principle}"/>
-    
-     <label >Enter Duration(yrs)</label>	
-    <apex:inputText value="{!years}"/>
-    
-     <label >Enter Rate of Interest(%)</label>
-    <apex:inputText value="{!intrest}"/>
-    
-   <apex:commandButton value="Find SI" action="{!calculateSI}" rerender="resultPanel, errorPanel" />
-           
-     <apex:outputPanel id="errorPanel" rendered="{!NOT(ISBLANK(errorMessage))}" >
-                <h3>{!errorMessage}</h3>
+<apex:page controller="SimpleCompoundCalculator">
+    <apex:form >
+        <apex:pageBlock title="Interest Calculator" mode="edit">
+            <apex:pageBlockSection columns="1">
+                <apex:outputLabel value="Enter Principle Amount" for="p"/>
+                <apex:inputText id="p" value="{!principle}" />
+
+                <apex:outputLabel value="Enter Duration (yrs)" for="y"/>
+                <apex:inputText id="y" value="{!years}" />
+
+                <apex:outputLabel value="Enter Rate of Interest (%)" for="r"/>
+                <apex:inputText id="r" value="{!intrest}" />
+
+                <apex:commandButton value="Find Interest" action="{!calculateSI}" rerender="resultPanel, errorPanel"/>
+            </apex:pageBlockSection>
+
+            <apex:outputPanel id="errorPanel" rendered="{!NOT(ISBLANK(errorMessage))}">
+                <h3 style="color:red;">{!errorMessage}</h3>
             </apex:outputPanel>
-    
-            <apex:outputPanel id="resultPanel"  >
-                <h2  > Simple Interest: <span  >{!simpleinterest } </span></h2>
+
+            <apex:outputPanel id="resultPanel">
+                <h2>Simple Interest: <span>{!simpleinterest}</span></h2>
+                <h2>Compound Interest: <span>{!compoundinterest}</span></h2>
             </apex:outputPanel>
-                
-           </apex:form>
+        </apex:pageBlock>
+    </apex:form>
 </apex:page>
